@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with	tests	# enable tests (whatever they check)
+%bcond_without	tests	# Disabling these tests can speed build time and reduce disk space considerably.
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Mozilla Lightning - calendar extension for Thunderbird
@@ -85,7 +85,8 @@ Anglojêzyczne zasoby dla kalendarza Mozilla Sunbird.
 %build
 cd mozilla
 
-# info about building: http://www.mozilla.org/projects/calendar/lightning/build.html
+# info about lightning building: http://www.mozilla.org/projects/calendar/lightning/build.html
+# general mozilla.org build notes: http://developer.mozilla.org/en/docs/Configuring_Build_Options
 # To generate .mozconfig you may visit: http://webtools.mozilla.org/build/config.cgi
 
 cat << 'EOF' > .mozconfig
@@ -103,23 +104,28 @@ ac_add_options --localstatedir=%{_localstatedir}
 ac_add_options --sharedstatedir=%{_sharedstatedir}
 ac_add_options --mandir=%{_mandir}
 ac_add_options --infodir=%{_infodir}
-ac_add_options --enable-optimize="%{rpmcflags}"
 %if %{?debug:1}0
 ac_add_options --enable-debug
 ac_add_options --enable-debug-modules
+ac_add_options --disable-optimize
 %else
 ac_add_options --disable-debug
 ac_add_options --disable-debug-modules
+ac_add_options --enable-optimize="%{rpmcflags}"
 %endif
 %if %{with tests}
 ac_add_options --enable-tests
 %else
 ac_add_options --disable-tests
 %endif
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-@CONFIG_GUESS@
+ac_add_options --disable-freetype2
 ac_add_options --disable-logging
-ac_add_options --enable-application=calendar
-ac_add_options --enable-calendar
+ac_add_options --disable-old-abi-compat-wrappers
+ac_add_options --enable-application=mail
+ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-elf-dynstr-gc
+ac_add_options --enable-extensions=default,lightning
 ac_add_options --enable-image-decoders=all
 ac_add_options --enable-image-encoders=all
 ac_add_options --enable-ipcd
@@ -129,6 +135,7 @@ ac_add_options --enable-safe-browsing
 ac_add_options --enable-storage
 ac_add_options --enable-system-cairo
 ac_add_options --enable-url-classifier
+ac_add_options --enable-xft
 ac_add_options --with-default-mozilla-five-home=%{_thunderbirddir}
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-java-bin-path=/usr/bin
@@ -141,7 +148,7 @@ ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 EOF
 
-%{__make} -f client.mk build \
+%{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
 

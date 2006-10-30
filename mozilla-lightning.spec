@@ -9,16 +9,13 @@ Summary:	Mozilla Lightning - calendar extension for Thunderbird
 Summary(pl):	Mozilla Sunbird - samodzielny kalendarz
 Name:		mozilla-lightning
 Version:	0.3
-Release:	0.1
+Release:	0.2
 License:	MPL/GPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases/0.3/source/lightning-%{version}.source.tar.bz2
 # Source0-md5:	8b2beb97f40d371993a175d53a1ef8ac
 URL:		http://www.mozilla.org/projects/calendar/lightning/
 BuildRequires:	GConf2-devel >= 1.2.1
-#BuildRequires:	automake
-#BuildRequires:	cairo-devel >= 1.0.0
-#BuildRequires:	freetype-devel
 BuildRequires:	gnome-vfs2-devel >= 2.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	libgnome-devel >= 2.0
@@ -29,14 +26,12 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	glib2-devel >= 1:1.3.7
-#BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 #BuildRequires:	xorg-lib-libXext-devel
 #BuildRequires:	xorg-lib-libXft-devel >= 2.1
 #BuildRequires:	xorg-lib-libXinerama-devel
 #BuildRequires:	xorg-lib-libXp-devel
 #BuildRequires:	xorg-lib-libXt-devel
-#BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2
@@ -54,20 +49,6 @@ email-related calendaring tasks.
 %description -l pl
 Projekt Sunbird to wieloplatformowa aplikacja bed±ca samodzielnym
 kalendarzem, oparta na jêzyku interfejsu u¿ytkownika XUL.
-
-%package devel
-Summary:	Headers for developing programs that will use Mozilla Sunbird
-Summary(pl):	Mozilla Sunbird - pliki nag³ówkowe
-Group:		X11/Development/Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	nspr-devel >= 1:4.6.1-2
-Obsoletes:	mozilla-devel
-
-%description devel
-Mozilla Sunbird development package.
-
-%description devel -l pl
-Pliki nag³ówkowe kalendarza Mozilla Sunbird.
 
 %package lang-en
 Summary:	English resources for Mozilla Sunbird
@@ -159,15 +140,18 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_thunderbirddir}/extensions
+cd mozilla
+install -d $RPM_BUILD_ROOT%{_thunderbirddir}/{extensions,chrome}
 install obj-*/dist/xpi-stage/lightning.xpi $RPM_BUILD_ROOT%{_thunderbirddir}/extensions
+install obj-*/dist/xpi-stage/lightning/chrome/lightning-en-US.jar $RPM_BUILD_ROOT%{_thunderbirddir}/chrome
+install obj-*/dist/xpi-stage/lightning/chrome.manifest $RPM_BUILD_ROOT%{_thunderbirddir}/chrome/lightning-en-US.manifest
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%{_thunderbirddir}/extensions/lightning.jar
+%{_thunderbirddir}/extensions/lightning.xpi
 
 %files lang-en
 %defattr(644,root,root,755)

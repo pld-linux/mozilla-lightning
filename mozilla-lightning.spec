@@ -10,15 +10,15 @@ Version:	0.3
 Release:	0.1
 License:	MPL/GPL/LGPL
 Group:		X11/Applications/Networking
-Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases/0.3/source/lightning-0.3.source.tar.bz2
+Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases/0.3/source/lightning-%{version}.source.tar.bz2
 # Source0-md5:	8b2beb97f40d371993a175d53a1ef8ac
 URL:		http://www.mozilla.org/projects/calendar/lightning/
 BuildRequires:	GConf2-devel >= 1.2.1
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
+BuildRequires:	freetype-devel
 BuildRequires:	gnome-vfs2-devel >= 2.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	freetype-devel
 BuildRequires:	libgnome-devel >= 2.0
 BuildRequires:	libgnomeui-devel >= 2.2.0
 BuildRequires:	nspr-devel >= 1:4.6.1-2
@@ -33,17 +33,18 @@ BuildRequires:	pkgconfig
 #BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
-Requires:	%{name}-lang-resources = %{version}
+Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sunbirddir	%{_libdir}/mozilla-sunbird
+%define		_thunderbirddir	%{_libdir}/mozilla-thunderbird
 
 %description
-Lightning brings the Sunbird calendar to the popular email client, Mozilla
-Thunderbird. Since it's an extension, Lightning is tightly integrated with
-Thunderbird, allowing it to easily perform email-related calendaring tasks.
+Lightning brings the Sunbird calendar to the popular email client,
+Mozilla Thunderbird. Since it's an extension, Lightning is tightly
+integrated with Thunderbird, allowing it to easily perform
+email-related calendaring tasks.
 
 %description -l pl
 Projekt Sunbird to wieloplatformowa aplikacja bed±ca samodzielnym
@@ -79,78 +80,120 @@ English resources for Mozilla Sunbird.
 Anglojêzyczne zasoby dla kalendarza Mozilla Sunbird.
 
 %prep
-%setup -q -n mozilla
+%setup -qc
 
 %build
-%configure2_13 \
-	--enable-application=calendar
+cd mozilla
 
-%{__make}
+# info about building: http://www.mozilla.org/projects/calendar/lightning/build.html
+# To generate .mozconfig you may visit: http://webtools.mozilla.org/build/config.cgi
+
+cat << 'EOF' > .mozconfig
+# Options for 'configure' (same as command-line options).
+ac_add_options --prefix=%{_prefix}
+ac_add_options --exec-prefix=%{_exec_prefix}
+ac_add_options --bindir=%{_bindir}
+ac_add_options --sbindir=%{_sbindir}
+ac_add_options --sysconfdir=%{_sysconfdir}
+ac_add_options --datadir=%{_datadir}
+ac_add_options --includedir=%{_includedir}
+ac_add_options --libdir=%{_libdir}
+ac_add_options --libexecdir=%{_libexecdir}
+ac_add_options --localstatedir=%{_localstatedir}
+ac_add_options --sharedstatedir=%{_sharedstatedir}
+ac_add_options --mandir=%{_mandir}
+ac_add_options --infodir=%{_infodir}
+ac_add_options --enable-optimize="%{rpmcflags}"
+%if %{?debug:1}0
+ac_add_options --enable-debug
+ac_add_options --enable-debug-modules
+%else
+ac_add_options --disable-debug
+ac_add_options --disable-debug-modules
+%endif
+%if %{with tests}
+ac_add_options --enable-tests
+%else
+ac_add_options --disable-tests
+%endif
+ac_add_options --disable-logging
+ac_add_options --enable-application=calendar
+ac_add_options --enable-calendar
+ac_add_options --enable-elf-dynstr-gc
+ac_add_options --enable-image-decoders=all
+ac_add_options --enable-image-encoders=all
+ac_add_options --enable-ipcd
+ac_add_options --enable-ldap-experimental
+ac_add_options --enable-native-uconv
+ac_add_options --enable-safe-browsing
+ac_add_options --enable-storage
+ac_add_options --enable-system-cairo
+ac_add_options --enable-url-classifier
+ac_add_options --with-default-mozilla-five-home=%{_thunderbirddir}
+ac_add_options --with-distribution-id=org.pld-linux
+ac_add_options --with-java-bin-path=/usr/bin
+ac_add_options --with-java-include-path=/usr/include
+ac_add_options --with-qtdir=/usr
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+EOF
+
+%{__make} -f client.mk build \
+	CC="%{__cc}" \
+	CXX="%{__cxx}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d \
-	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
-	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
-	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
 
-%{__make} install \
+%{__make} -C mozilla install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%post
-%{_sbindir}/firefox-chrome+xpcom-generate
-
-%postun
-if [ "$1" = "0" ]; then
-	rm -rf %{_sunbirddir}/chrome/overlayinfo
-	rm -f  %{_sunbirddir}/chrome/*.rdf
-	rm -rf %{_sunbirddir}/components
-	rm -rf %{_sunbirddir}/extensions
-fi
 
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/*
-%dir %{_sunbirddir}
-%{_sunbirddir}/res
-%dir %{_sunbirddir}/components
-%attr(755,root,root) %{_sunbirddir}/components/*.so
-%{_sunbirddir}/components/*.js
-%{_sunbirddir}/components/*.xpt
-%dir %{_sunbirddir}/plugins
-%attr(755,root,root) %{_sunbirddir}/plugins/*.so
-%{_sunbirddir}/searchplugins
-%{_sunbirddir}/icons
-%{_sunbirddir}/defaults
-%{_sunbirddir}/greprefs
-%dir %{_sunbirddir}/extensions
-%dir %{_sunbirddir}/init.d
-%attr(755,root,root) %{_sunbirddir}/*.so
-%attr(755,root,root) %{_sunbirddir}/*.sh
-%attr(755,root,root) %{_sunbirddir}/m*
-%attr(755,root,root) %{_sunbirddir}/f*
-%attr(755,root,root) %{_sunbirddir}/reg*
-%attr(755,root,root) %{_sunbirddir}/x*
+%dir %{_thunderbirddir}
+%{_thunderbirddir}/res
+%dir %{_thunderbirddir}/components
+%attr(755,root,root) %{_thunderbirddir}/components/*.so
+%{_thunderbirddir}/components/*.js
+%{_thunderbirddir}/components/*.xpt
+%dir %{_thunderbirddir}/plugins
+%attr(755,root,root) %{_thunderbirddir}/plugins/*.so
+%{_thunderbirddir}/searchplugins
+%{_thunderbirddir}/icons
+%{_thunderbirddir}/defaults
+%{_thunderbirddir}/greprefs
+%dir %{_thunderbirddir}/extensions
+%dir %{_thunderbirddir}/init.d
+%attr(755,root,root) %{_thunderbirddir}/*.so
+%attr(755,root,root) %{_thunderbirddir}/*.sh
+%attr(755,root,root) %{_thunderbirddir}/m*
+%attr(755,root,root) %{_thunderbirddir}/f*
+%attr(755,root,root) %{_thunderbirddir}/reg*
+%attr(755,root,root) %{_thunderbirddir}/x*
 %{_pixmapsdir}/*
 %{_desktopdir}/*
 
-%dir %{_sunbirddir}/chrome
-%{_sunbirddir}/chrome/*.jar
-%{_sunbirddir}/chrome/*.manifest
+%dir %{_thunderbirddir}/chrome
+%{_thunderbirddir}/chrome/*.jar
+%{_thunderbirddir}/chrome/*.manifest
 # -chat subpackage?
-#%{_sunbirddir}/chrome/chatzilla.jar
-#%{_sunbirddir}/chrome/content-packs.jar
-%dir %{_sunbirddir}/chrome/icons
-%{_sunbirddir}/chrome/icons/default
+#%{_thunderbirddir}/chrome/chatzilla.jar
+#%{_thunderbirddir}/chrome/content-packs.jar
+%dir %{_thunderbirddir}/chrome/icons
+%{_thunderbirddir}/chrome/icons/default
 
 # -dom-inspector subpackage?
-%dir %{_sunbirddir}/extensions/inspector@mozilla.org
-%{_sunbirddir}/extensions/inspector@mozilla.org/*
+%dir %{_thunderbirddir}/extensions/inspector@mozilla.org
+%{_thunderbirddir}/extensions/inspector@mozilla.org/*
 
 %files devel
 %defattr(644,root,root,755)
@@ -163,5 +206,5 @@ fi
 
 %files lang-en
 %defattr(644,root,root,755)
-%{_sunbirddir}/chrome/en-US.jar
-%{_sunbirddir}/chrome/en-US.manifest
+%{_thunderbirddir}/chrome/en-US.jar
+%{_thunderbirddir}/chrome/en-US.manifest

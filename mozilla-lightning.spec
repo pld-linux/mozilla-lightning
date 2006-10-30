@@ -1,3 +1,5 @@
+# TODO
+# - searches for nss-config; fails and builds with internal nss
 #
 # Conditional build:
 %bcond_without	tests	# Disabling these tests can speed build time and reduce disk space considerably.
@@ -14,24 +16,27 @@ Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases
 # Source0-md5:	8b2beb97f40d371993a175d53a1ef8ac
 URL:		http://www.mozilla.org/projects/calendar/lightning/
 BuildRequires:	GConf2-devel >= 1.2.1
-BuildRequires:	automake
-BuildRequires:	cairo-devel >= 1.0.0
-BuildRequires:	freetype-devel
+#BuildRequires:	automake
+#BuildRequires:	cairo-devel >= 1.0.0
+#BuildRequires:	freetype-devel
 BuildRequires:	gnome-vfs2-devel >= 2.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	libgnome-devel >= 2.0
 BuildRequires:	libgnomeui-devel >= 2.2.0
 BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
+BuildRequires:	libjpeg-devel
 BuildRequires:	pango-devel >= 1:1.6.0
-BuildRequires:	perl-modules >= 5.004
+BuildRequires:	libIDL-devel >= 0.8.0
+BuildRequires:	glib2-devel >= 1:1.3.7
+#BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 #BuildRequires:	xorg-lib-libXext-devel
 #BuildRequires:	xorg-lib-libXft-devel >= 2.1
 #BuildRequires:	xorg-lib-libXinerama-devel
 #BuildRequires:	xorg-lib-libXp-devel
 #BuildRequires:	xorg-lib-libXt-devel
-BuildRequires:	zip
+#BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2
@@ -154,64 +159,17 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-%{__make} -C mozilla install \
-	DESTDIR=$RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_thunderbirddir}/extensions
+install obj-*/dist/xpi-stage/lightning.xpi $RPM_BUILD_ROOT%{_thunderbirddir}/extensions
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/mozilla*
-%attr(755,root,root) %{_bindir}/firefox
-%attr(755,root,root) %{_sbindir}/*
-%dir %{_thunderbirddir}
-%{_thunderbirddir}/res
-%dir %{_thunderbirddir}/components
-%attr(755,root,root) %{_thunderbirddir}/components/*.so
-%{_thunderbirddir}/components/*.js
-%{_thunderbirddir}/components/*.xpt
-%dir %{_thunderbirddir}/plugins
-%attr(755,root,root) %{_thunderbirddir}/plugins/*.so
-%{_thunderbirddir}/searchplugins
-%{_thunderbirddir}/icons
-%{_thunderbirddir}/defaults
-%{_thunderbirddir}/greprefs
-%dir %{_thunderbirddir}/extensions
-%dir %{_thunderbirddir}/init.d
-%attr(755,root,root) %{_thunderbirddir}/*.so
-%attr(755,root,root) %{_thunderbirddir}/*.sh
-%attr(755,root,root) %{_thunderbirddir}/m*
-%attr(755,root,root) %{_thunderbirddir}/f*
-%attr(755,root,root) %{_thunderbirddir}/reg*
-%attr(755,root,root) %{_thunderbirddir}/x*
-%{_pixmapsdir}/*
-%{_desktopdir}/*
-
-%dir %{_thunderbirddir}/chrome
-%{_thunderbirddir}/chrome/*.jar
-%{_thunderbirddir}/chrome/*.manifest
-# -chat subpackage?
-#%{_thunderbirddir}/chrome/chatzilla.jar
-#%{_thunderbirddir}/chrome/content-packs.jar
-%dir %{_thunderbirddir}/chrome/icons
-%{_thunderbirddir}/chrome/icons/default
-
-# -dom-inspector subpackage?
-%dir %{_thunderbirddir}/extensions/inspector@mozilla.org
-%{_thunderbirddir}/extensions/inspector@mozilla.org/*
-
-%files devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/regxpcom
-%attr(755,root,root) %{_bindir}/xpidl
-%attr(755,root,root) %{_bindir}/xpt_dump
-%attr(755,root,root) %{_bindir}/xpt_link
-%{_includedir}/%{name}
-%{_pkgconfigdir}/*
+%{_thunderbirddir}/extensions/lightning.jar
 
 %files lang-en
 %defattr(644,root,root,755)
-%{_thunderbirddir}/chrome/en-US.jar
-%{_thunderbirddir}/chrome/en-US.manifest
+%{_thunderbirddir}/chrome/lightning-en-US.jar
+%{_thunderbirddir}/chrome/lightning-en-US.manifest

@@ -16,22 +16,24 @@ Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases
 # Source0-md5:	8b2beb97f40d371993a175d53a1ef8ac
 URL:		http://www.mozilla.org/projects/calendar/lightning/
 BuildRequires:	GConf2-devel >= 1.2.1
+BuildRequires:	glib2-devel >= 1:1.3.7
 BuildRequires:	gnome-vfs2-devel >= 2.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
+BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libgnome-devel >= 2.0
 BuildRequires:	libgnomeui-devel >= 2.2.0
+BuildRequires:	libjpeg-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
-BuildRequires:	libjpeg-devel
 BuildRequires:	pango-devel >= 1:1.6.0
-BuildRequires:	libIDL-devel >= 0.8.0
-BuildRequires:	glib2-devel >= 1:1.3.7
+BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 #BuildRequires:	xorg-lib-libXext-devel
 #BuildRequires:	xorg-lib-libXft-devel >= 2.1
 #BuildRequires:	xorg-lib-libXinerama-devel
 #BuildRequires:	xorg-lib-libXp-devel
 #BuildRequires:	xorg-lib-libXt-devel
+BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2

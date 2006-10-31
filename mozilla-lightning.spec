@@ -80,6 +80,7 @@ cd mozilla
 # info about lightning building: http://www.mozilla.org/projects/calendar/lightning/build.html
 # general mozilla.org build notes: http://developer.mozilla.org/en/docs/Configuring_Build_Options
 # To generate .mozconfig you may visit: http://webtools.mozilla.org/build/config.cgi
+# more: http://www.mozilla.org/build/configurator-faq.html
 
 cat << 'EOF' > .mozconfig
 # Options for 'configure' (same as command-line options).

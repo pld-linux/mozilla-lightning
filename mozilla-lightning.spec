@@ -38,6 +38,10 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
+# some obscure error:
+# /home/builder/rpm/pld/BUILD/mozilla-lightning-0.3/mozilla/obj-x86_64-unknown-linux-gnu/config/nsinstall -R -m 755 libtestdynamic.so ../../../dist/bin/components ../../../dist/bin/elf-dynstr-gc ../../../dist/bin/components/libtestdynamic.so
+# Only 32bit ELF files supported
+ExcludeArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_thunderbirddir	%{_libdir}/mozilla-thunderbird

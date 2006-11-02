@@ -159,6 +159,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %{_thunderbirddir}/extensions/lightning.xpi
+# should put data there instead:
+#%dir %{_thunderbirddir}/extensions/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 
 %files lang-en
 %defattr(644,root,root,755)

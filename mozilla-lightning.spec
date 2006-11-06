@@ -6,7 +6,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Mozilla Lightning - calendar extension for Thunderbird
-Summary(pl):	Mozilla Sunbird - samodzielny kalendarz
+Summary(pl):	Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
 Name:		mozilla-lightning
 Version:	0.3
 Release:	0.2
@@ -38,10 +38,6 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires:	mozilla-thunderbird >= 1.5
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
-# some obscure error:
-# /home/builder/rpm/pld/BUILD/mozilla-lightning-0.3/mozilla/obj-x86_64-unknown-linux-gnu/config/nsinstall -R -m 755 libtestdynamic.so ../../../dist/bin/components ../../../dist/bin/elf-dynstr-gc ../../../dist/bin/components/libtestdynamic.so
-# Only 32bit ELF files supported
-ExcludeArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_thunderbirddir	%{_libdir}/mozilla-thunderbird
@@ -53,12 +49,14 @@ integrated with Thunderbird, allowing it to easily perform
 email-related calendaring tasks.
 
 %description -l pl
-Projekt Sunbird to wieloplatformowa aplikacja bed±ca samodzielnym
-kalendarzem, oparta na jêzyku interfejsu u¿ytkownika XUL.
+Lightning udostêpnia kalendarz Sunbird dla popularnego klienta poczty
+elektronicznej Mozilla Thunderbird. Poniewa¿ jest to rozszerzenie,
+Lightning jest ¶ci¶le zintegrowany z Thunderbirdem, co pozwala ³atwo
+wykonywaæ zadania kalendarzowe zwi±zane z poczt± elektroniczn±.
 
 %package lang-en
-Summary:	English resources for Mozilla Sunbird
-Summary(pl):	Anglojêzyczne zasoby dla kalendarza Mozilla Sunbird
+Summary:	English resources for Mozilla Lightning
+Summary(pl):	Anglojêzyczne zasoby dla kalendarza Mozilla Lightning
 Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
@@ -66,10 +64,10 @@ Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
 %description lang-en
-English resources for Mozilla Sunbird.
+English resources for Mozilla Lightning.
 
 %description lang-en -l pl
-Anglojêzyczne zasoby dla kalendarza Mozilla Sunbird.
+Anglojêzyczne zasoby dla kalendarza Mozilla Lightning.
 
 %prep
 %setup -qc
@@ -117,7 +115,6 @@ ac_add_options --disable-logging
 ac_add_options --disable-old-abi-compat-wrappers
 ac_add_options --enable-application=mail
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --enable-elf-dynstr-gc
 ac_add_options --enable-extensions=default,lightning
 ac_add_options --enable-image-decoders=all
 ac_add_options --enable-image-encoders=all

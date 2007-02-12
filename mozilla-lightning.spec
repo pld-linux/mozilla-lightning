@@ -6,7 +6,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Mozilla Lightning - calendar extension for Thunderbird
-Summary(pl):	Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
+Summary(pl.UTF-8):   Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
 Name:		mozilla-lightning
 Version:	0.3
 Release:	0.2
@@ -48,15 +48,15 @@ Mozilla Thunderbird. Since it's an extension, Lightning is tightly
 integrated with Thunderbird, allowing it to easily perform
 email-related calendaring tasks.
 
-%description -l pl
-Lightning udostêpnia kalendarz Sunbird dla popularnego klienta poczty
-elektronicznej Mozilla Thunderbird. Poniewa¿ jest to rozszerzenie,
-Lightning jest ¶ci¶le zintegrowany z Thunderbirdem, co pozwala ³atwo
-wykonywaæ zadania kalendarzowe zwi±zane z poczt± elektroniczn±.
+%description -l pl.UTF-8
+Lightning udostÄ™pnia kalendarz Sunbird dla popularnego klienta poczty
+elektronicznej Mozilla Thunderbird. PoniewaÅ¼ jest to rozszerzenie,
+Lightning jest Å›ciÅ›le zintegrowany z Thunderbirdem, co pozwala Å‚atwo
+wykonywaÄ‡ zadania kalendarzowe zwiÄ…zane z pocztÄ… elektronicznÄ….
 
 %package lang-en
 Summary:	English resources for Mozilla Lightning
-Summary(pl):	Anglojêzyczne zasoby dla kalendarza Mozilla Lightning
+Summary(pl.UTF-8):   AnglojÄ™zyczne zasoby dla kalendarza Mozilla Lightning
 Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
@@ -66,8 +66,8 @@ Provides:	%{name}-lang-resources = %{version}-%{release}
 %description lang-en
 English resources for Mozilla Lightning.
 
-%description lang-en -l pl
-Anglojêzyczne zasoby dla kalendarza Mozilla Lightning.
+%description lang-en -l pl.UTF-8
+AnglojÄ™zyczne zasoby dla kalendarza Mozilla Lightning.
 
 %prep
 %setup -qc

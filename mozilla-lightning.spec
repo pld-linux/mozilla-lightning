@@ -6,7 +6,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Mozilla Lightning - calendar extension for Thunderbird
-Summary(pl.UTF-8):   Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
+Summary(pl.UTF-8):	Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
 Name:		mozilla-lightning
 Version:	0.3
 Release:	0.2
@@ -56,7 +56,7 @@ wykonywać zadania kalendarzowe związane z pocztą elektroniczną.
 
 %package lang-en
 Summary:	English resources for Mozilla Lightning
-Summary(pl.UTF-8):   Anglojęzyczne zasoby dla kalendarza Mozilla Lightning
+Summary(pl.UTF-8):	Anglojęzyczne zasoby dla kalendarza Mozilla Lightning
 Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils

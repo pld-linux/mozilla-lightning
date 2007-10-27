@@ -8,12 +8,12 @@
 Summary:	Mozilla Lightning - calendar extension for Thunderbird
 Summary(pl.UTF-8):	Mozilla Lightning - kalendarz jako rozszerzenie dla Thunderbirda
 Name:		mozilla-lightning
-Version:	0.3
-Release:	0.2
+Version:	0.5
+Release:	0.1
 License:	MPL/GPL/LGPL
 Group:		X11/Applications/Networking
-Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases/0.3/source/lightning-%{version}.source.tar.bz2
-# Source0-md5:	8b2beb97f40d371993a175d53a1ef8ac
+Source0:	http://releases.mozilla.org/pub/mozilla.org/calendar/lightning/releases/0.5/source/lightning-sunbird-%{version}-source.tar.bz2
+# Source0-md5:	77b2f84c7ff099934ef5b48a7c61cb24
 URL:		http://www.mozilla.org/projects/calendar/lightning/
 BuildRequires:	GConf2-devel >= 1.2.1
 BuildRequires:	glib2-devel >= 1:1.3.7
